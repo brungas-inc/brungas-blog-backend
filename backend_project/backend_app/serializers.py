@@ -1,12 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-
-
 from rest_framework.serializers import ModelSerializer
-from django.contrib.auth import get_user_model
 
-UserModel = get_user_model()
+from .models import Post
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -58,3 +55,15 @@ class RegisterSerializer(ModelSerializer):
         model = User
         fields = '__all__'
         extra_kwargs = {'password': {'write_only':True}}
+
+
+
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+# class CommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Comment
+#         fields = '__all__'
