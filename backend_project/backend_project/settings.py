@@ -9,6 +9,11 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import environ
+import os
+
+env = environ.Env()
+environ.Env.read_env()
 
 from pathlib import Path
 
@@ -20,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@ymp+3zow=)#mide9==-hfum$5q@7pe_^907&j6y&4wi4i1mh&'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,9 +45,26 @@ INSTALLED_APPS = [
     'backend_app',
     'rest_framework',
     'django_rest_passwordreset',
+    'cloudinary_storage',
+    'cloudinary',
+    'rest_framework_simplejwt.token_blacklist'
+
 ]
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND= 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=os.environ.get('E_U') #LOGIN EMAIL ADDRESS FOR GMAIL
+
+EMAIL_HOST_PASSWORD=os.environ.get('E_P')
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME':env('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': env('CLOUDINARY_API_KEY'),
+    'API_SECRET':env('CLOUDINARY_API_SECRET'),
+}
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -64,7 +86,7 @@ from datetime import timedelta
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,

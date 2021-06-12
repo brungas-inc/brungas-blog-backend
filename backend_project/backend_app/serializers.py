@@ -2,6 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.serializers import ModelSerializer
+import django.contrib.auth.password_validation as validators
+
 
 from .models import Post, Comment, PostLikes
 
@@ -56,6 +58,12 @@ class RegisterSerializer(ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'password': {'write_only':True}}
 
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
 
 
 class PostSerializer(serializers.ModelSerializer):

@@ -17,11 +17,11 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
 
     send_mail(
         # title:
-        "Password Reset for {title}".format(title="Some website title"),
+        "Password Reset for {title}".format(title="AlvartxBrungas"),
         # message:
         email_plaintext_message,
         # from:
-        "timotheomhoja@gmail.com",
+        "jsterjay@gmail.com",
         # to:
         [reset_password_token.user.email]
     )
