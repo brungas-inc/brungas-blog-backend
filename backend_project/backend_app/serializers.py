@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.serializers import ModelSerializer
 
-from .models import Post
+from .models import Post, Comment, PostLikes
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields =[ 'id', '_id','username','email', 'first_name','first_name','isAdmin' ]
+        fields =[ 'id','username','email', 'first_name','first_name','isAdmin' ]
 
    
     def get__id(self,obj):
@@ -30,7 +30,7 @@ class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only =True)
     class Meta:
         model = User
-        fields =[ 'id', '_id','username','email','isAdmin' , 'first_name' ,'last_name' ,'token']
+        fields =[ 'id','username','email','isAdmin' , 'first_name' ,'last_name' ,'token']
 
     def get_token(self,obj):
         token = RefreshToken.for_user(obj)
@@ -63,7 +63,12 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = '__all__'
 
-# class CommentSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Comment
-#         fields = '__all__'
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class PostLikestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostLikes
+        fields = '__all__'

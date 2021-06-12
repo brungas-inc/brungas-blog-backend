@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 from django.core.mail import EmailMultiAlternatives
 from django.dispatch import receiver
-from django.template.loader import render_to_string
 from django.urls import reverse
 
 from django_rest_passwordreset.signals import reset_password_token_created
@@ -22,7 +21,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         # message:
         email_plaintext_message,
         # from:
-        "noreply@somehost.local",
+        "timotheomhoja@gmail.com",
         # to:
         [reset_password_token.user.email]
     )
@@ -34,6 +33,7 @@ class Post(models.Model):
     description = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
   
 
     def __str__(self):
@@ -41,15 +41,17 @@ class Post(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    post_id = models.AutoField(primary_key=True, editable=False)
+    post=models.ForeignKey(Post,on_delete=models.CASCADE) 
     comment_text = models.TextField(null=True, blank=True)
     date_commented = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return f'{self.comment_text}'
 
 class PostLikes(models.Model):
-    likeusers = models.ManyToManyField(User)
-    likepost = models.ForeignKey(Post,on_delete=models.CASCADE,null=True,related_name='likepost')        
+    likeusers = models.ForeignKey(User,on_delete=models.CASCADE)
+    likepost = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='likepost')
+    # class Meta:
+    #     unique_together=['likeusers','likepost']
