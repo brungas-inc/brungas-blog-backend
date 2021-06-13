@@ -84,7 +84,8 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
-class PostLikestSerializer(serializers.ModelSerializer):
+class PostLikeSerializer(serializers.ModelSerializer):
+    likers=serializers.CharField(source="likeusers.username",read_only=True)
     class Meta:
         model = PostLikes
-        fields = '__all__'
+        fields = ['likeusers','likers']

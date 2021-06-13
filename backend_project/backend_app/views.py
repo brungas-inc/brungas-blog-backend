@@ -11,7 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import (
     UserProfileSerializer, UserSerializerWithToken , RegisterSerializer,ChangePasswordSerializer,
-    PostSerializer,CommentSerializer, PostLikestSerializer)
+    PostSerializer,CommentSerializer, PostLikeSerializer)
 
 # Create your views here.
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -89,6 +89,21 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+class GetSinglePostsAPI(APIView):
+    def get(self, request,id):
+        post = Post.objects.get(id=id)
+        comments = Comment.objects.filter(post=id)
+        like_count= PostLikes.objects.filter(likepost=id).count()
+        likers=PostLikes.objects.filter(likepost=id)
+        post_serializer = PostSerializer(post)
+        comments_serializer = CommentSerializer(comments, many=True)
+        likers_serializer=PostLikeSerializer(likers,many=True)
+        return Response({
+            'post': post_serializer.data,
+            'comments': comments_serializer.data,
+            'likers':likers_serializer.data,
+            'likes':like_count,
+        })
 
 # VIEW SETS
 
@@ -130,4 +145,4 @@ class PostLikesViewSet(viewsets.ModelViewSet):
     # permission_classes = [
     #     permissions.IsAuthenticated,
     # ]
-    serializer_class = PostLikestSerializer
+    serializer_class = PostLikeSerializer
