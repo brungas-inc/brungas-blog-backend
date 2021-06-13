@@ -92,9 +92,9 @@ class LogoutView(APIView):
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(is_active=True)
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
     serializer_class = PostSerializer
 
 # class PostDeleteAPI(generics.UpdateAPIView):
@@ -107,15 +107,15 @@ class PostViewSet(viewsets.ModelViewSet):
    
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.filter(is_active=True)
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
     serializer_class =CommentSerializer
 
    
 class PostLikesViewSet(viewsets.ModelViewSet):
     queryset = PostLikes.objects.all()
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
     serializer_class = PostLikestSerializer

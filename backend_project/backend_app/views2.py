@@ -22,17 +22,14 @@ class GetPostByUserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
 
 class GetCommentsByPostViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     serializer_class = CommentSerializer
-    permission_classes = [
-        permissions.IsAuthenticated ]
-
+    
     def get_queryset(self):
         post_id = self.kwargs.get('postId')
         return Comment.objects.filter(post=post_id)
 
 class GetPostLikestViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     serializer_class = PostLikestSerializer
-    permission_classes = [
-        permissions.IsAuthenticated ]
+   
 
     def get_queryset(self):
         post_id = self.kwargs.get('postId')
