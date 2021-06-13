@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import PostViewSet,CommentViewSet, PostLikesViewSet, UserProfileViewSet
+from .views import PostViewSet,CommentViewSet, PostLikesViewSet, UserProfileViewSet, UserViewSet
 from .views2 import( GetCommentsByPostViewSet, GetPostByUserViewSet,
  GetPostLikesViewSet, GetPostLikesCountsViewSet)
 
@@ -8,6 +8,8 @@ router = routers.DefaultRouter()
 router.register('all_posts',PostViewSet , 'all_posts')
 router.register('all_comments',CommentViewSet , 'all_comments')
 router.register('all_likes',PostLikesViewSet , 'all_likes')
+router.register('users', UserViewSet , 'user')
+
 
 
 # FITTERED URL

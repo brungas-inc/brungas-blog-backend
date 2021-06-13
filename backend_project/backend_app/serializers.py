@@ -10,13 +10,12 @@ from .models import Post, Comment, PostLikes
 
 class UserSerializer(serializers.ModelSerializer):
     # name = serializers.SerializerMethodField(read_only =True)
-    _id = serializers.SerializerMethodField(read_only =True)
-    isAdmin = serializers.SerializerMethodField(read_only =True)
-
+    # _id = serializers.SerializerMethodField(read_only =True)
+    # isAdmin = serializers.SerializerMethodField(read_only =True)
 
     class Meta:
         model = User
-        fields =[ 'id','username','email', 'first_name','first_name','isAdmin' ]
+        fields =[ 'id','username','email', 'first_name','first_name','is_staff' ]
 
    
     def get__id(self,obj):
@@ -88,4 +87,4 @@ class PostLikeSerializer(serializers.ModelSerializer):
     likers=serializers.CharField(source="likeusers.username",read_only=True)
     class Meta:
         model = PostLikes
-        fields = ['likeusers','likers']
+        fields = '__all__'

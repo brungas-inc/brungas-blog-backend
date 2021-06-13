@@ -7,10 +7,14 @@ from rest_framework import fields, generics, permissions, viewsets
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+# from rest_framework.generics import GenericAPIView
 
 
 from .serializers import (
-    UserProfileSerializer, UserSerializerWithToken , RegisterSerializer,ChangePasswordSerializer,
+    UserProfileSerializer, UserSerializerWithToken ,
+    RegisterSerializer,ChangePasswordSerializer,UserSerializer,
     PostSerializer,CommentSerializer, PostLikeSerializer)
 
 # Create your views here.
@@ -76,18 +80,13 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LogoutView(APIView):
-    permission_classes = (IsAuthenticated,)
 
-    def post(self, request):
-        try:
-            refresh_token = request.data["refresh_token"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+# class LogoutView(APIView):
+#     def get(self, request, format=None):
+#         # simply delete the token to force a login
+#         if request.is_authenticated():
+#             request.user.auth_token.delete()
+#         return Response(status=status.HTTP_200_OK)
 
 class GetSinglePostsAPI(APIView):
     def get(self, request,id):
@@ -106,6 +105,32 @@ class GetSinglePostsAPI(APIView):
         })
 
 # VIEW SETS
+
+
+
+
+
+class UserViewSet(viewsets.ViewSet):
+    
+    def list(self, request):
+        queryset = User.objects.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = User.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+class LogoutView(APIView):
+    authentication_classes = [IsAuthenticated, ]
+    permission_classes= [IsAuthenticated,]
+    def get(self, request):
+        #deleting the token in order to logout
+        request.user.auth_token.delete()
+        return Response("Successfully Logged Out!", status= status.HTTP_200)
+
 
 class UserProfileViewSet(generics.RetrieveAPIView):
     permission_classes = (IsAuthenticated,)
@@ -146,3 +171,10 @@ class PostLikesViewSet(viewsets.ModelViewSet):
     #     permissions.IsAuthenticated,
     # ]
     serializer_class = PostLikeSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
+    serializer_class = UserSerializer
