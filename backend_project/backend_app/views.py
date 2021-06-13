@@ -87,6 +87,18 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+class GetSinglePostsAPI(APIView):
+    def get(self, request,id):
+        post = Post.objects.get(id=id)
+        comments = Comment.objects.filter(post=id)
+
+        post_serializer = PostSerializer(post)
+        comments_serializer = CommentSerializer(comments, many=True)
+
+        return Response({
+            'post': post_serializer.data,
+            'comments': comments_serializer.data
+        })
 
 # VIEW SETS
 

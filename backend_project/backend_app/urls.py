@@ -10,5 +10,6 @@ urlpatterns =[
     # path('post/<int:id>/delete/', views.PostDeleteAPI.as_view(), name= 'post-delete'),
     path('post/<int:pk>/add-like/', views2.AddLikeAPI.as_view(), name= 'add-like'),
     path('change_password/<int:pk>/', views.ChangePasswordView.as_view(), name='auth_change_password'),
+    path('post/single-post/<int:id>/',views.GetSinglePostsAPI.as_view(),name='sing-lepost'),
 
     ]
