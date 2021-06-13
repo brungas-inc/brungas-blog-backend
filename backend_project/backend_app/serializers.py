@@ -32,7 +32,7 @@ class UserSerializerWithToken(UserSerializer):
     token = serializers.SerializerMethodField(read_only =True)
     class Meta:
         model = User
-        fields =[ 'id','username','email','isAdmin' , 'first_name' ,'last_name' ,'token']
+        fields =[ 'token']
 
     def get_token(self,obj):
         token = RefreshToken.for_user(obj)
@@ -57,6 +57,12 @@ class RegisterSerializer(ModelSerializer):
         model = User
         fields = '__all__'
         extra_kwargs = {'password': {'write_only':True}}
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        exclude = ['password', 'user_permissions', 'groups']
 
 
 class ChangePasswordSerializer(serializers.Serializer):

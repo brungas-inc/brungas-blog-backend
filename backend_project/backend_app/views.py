@@ -2,13 +2,15 @@ from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Post, Comment,PostLikes 
+from .models import Post, Comment,PostLikes
 from rest_framework import fields, generics, permissions, viewsets
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 from .serializers import (
-    UserSerializerWithToken , RegisterSerializer,ChangePasswordSerializer,
+    UserProfileSerializer, UserSerializerWithToken , RegisterSerializer,ChangePasswordSerializer,
     PostSerializer,CommentSerializer, PostLikestSerializer)
 
 # Create your views here.
@@ -89,6 +91,16 @@ class LogoutView(APIView):
 
 
 # VIEW SETS
+
+class UserProfileViewSet(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = User.objects
+    serializer_class = UserProfileSerializer
+    def get_object(self):
+        obj = get_object_or_404(self.queryset, id=self.request.user.id)
+        return obj
+
+     
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(is_active=True)

@@ -1,5 +1,5 @@
 from rest_framework import routers
-from .views import PostViewSet,CommentViewSet, PostLikesViewSet
+from .views import PostViewSet,CommentViewSet, PostLikesViewSet, UserProfileViewSet
 from .views2 import( GetCommentsByPostViewSet, GetPostByUserViewSet,
  GetPostLikestViewSet, GetPostLikestCountsViewSet)
 
@@ -8,6 +8,7 @@ router = routers.DefaultRouter()
 router.register('all_posts',PostViewSet , 'all_posts')
 router.register('all_comments',CommentViewSet , 'all_comments')
 router.register('all_likes',PostLikesViewSet , 'all_likes')
+
 
 # FITTERED URL
 router.register(r'post/(?P<postId>\d+)/comments',GetCommentsByPostViewSet, 'post-coments')

@@ -26,6 +26,13 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         [reset_password_token.user.email]
     )
 
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_profile")
+#     first_name = models.CharField(max_length=200, null=True, blank=True)
+#     last_name = models.CharField(max_length=200, null=True, blank=True)
+#     email = models.EmailField(max_length = 254)
+#     def __str__(self):
+#         return f'{self.user.username} Profile'
 
 class Post(models.Model):
     user= models.ForeignKey(User, on_delete=models.PROTECT)
