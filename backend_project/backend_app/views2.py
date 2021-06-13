@@ -8,7 +8,7 @@ from .models import Post, Comment, PostLikes
 
 
 from .serializers import (
-        PostSerializer,CommentSerializer, PostLikestSerializer)
+        PostSerializer,CommentSerializer, PostLikeSerializer)
 
 
 class GetPostByUserViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
@@ -27,8 +27,8 @@ class GetCommentsByPostViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, m
         post_id = self.kwargs.get('postId')
         return Comment.objects.filter(post=post_id)
 
-class GetPostLikestViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
-    serializer_class = PostLikestSerializer
+class GetPostLikesViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+    serializer_class = PostLikeSerializer
    
 
     def get_queryset(self):
@@ -36,16 +36,16 @@ class GetPostLikestViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixin
         return PostLikes.objects.filter(likepost=post_id)
 
 
-class GetPostLikestCountsViewSet(APIView):
+class GetPostLikesCountsViewSet(APIView):
   
     def get(self,request,postId):
-        # serializer = PostLikestSerializer()
+        # serializer = PostLikeSerializer()
         like_count= PostLikes.objects.filter(likepost=postId).count()
         content= {'likes_count': like_count}
         return Response(content)
 
 class AddLikeAPI(APIView):
-    serializer_class=PostLikestSerializer
+    serializer_class=PostLikeSerializer
     def post(self,request,pk):
         likeusers = request.user
         likepost = Post.objects.get(id=pk)
